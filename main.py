@@ -1,39 +1,44 @@
-import tkinter as tk
-from PIL import Image, ImageTk
+import sys
+from PyQt6.QtWidgets import QApplication,  QLabel, QWidget
+from PyQt6.QtGui import QKeyEvent, QPixmap
+from PyQt6.QtCore import Qt
 
-# Create the main window
-root = tk.Tk()
-root.title("MAX")
+class AssistantApp(QWidget):
+    def __init__(self):
+        super().__init__()
 
-# Load assistant image
-image_path = "assets/images/mascot.png"
-image = Image.open(image_path)
-photo = ImageTk.PhotoImage(image)
+        # Set up the window
+        self.setWindowTitle('MAX')
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
-# Get screen width and height
-screen_width = root.winfo_screenwidth()
-screen_height = root.winfo_screenheight()
+        # Load the image
+        image_path = "assets/images/mascot.png"
+        pixmap = QPixmap(image_path)
 
-# Calculate poisition to place window in bottom right corner
-window_width = photo.width()
-window_height = photo.height()
-taskbar_height = 80
+        # Create label and set the pixmap
+        label = QLabel(self)
+        label.setPixmap(pixmap)
+        label.setStyleSheet("background: transparent;")
 
-x_position = screen_width - window_width
-y_position = screen_height- window_height - taskbar_height
+        # Set the size of the window to match the image
+        self.resize(pixmap.width(), pixmap.height())
 
-# Set the window size and poisition
-root.geometry(f"{window_width}x{window_height}+{x_position}+{y_position}")
+        # Position the window in the bottom right corner of the screen
+        screen = QApplication.primaryScreen().availableGeometry()
+        x_position = screen.width() - self.width()
+        y_position = screen.height() - self.height()
+        self.move(x_position, y_position)
+    
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key.Key_Escape:
+            self.close()
 
-# Set transparency transparency and background color
-root.attributes('-transparentcolor', 'white')
+def main():
+    app = QApplication(sys.argv)
+    assistant = AssistantApp()
+    assistant.show()
+    sys.exit(app.exec())
 
-# Create a label to hold the image
-label = tk.Label(root, image=photo, bg='white')
-label.pack()
-
-# Bind a key to close the window
-root.bind('<Escape>', lambda e: root.destroy())
-
-# Run the application
-root.mainloop()
+if __name__ == '__main__':
+    main()
