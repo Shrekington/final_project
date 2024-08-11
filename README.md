@@ -28,7 +28,7 @@ Follow these steps to set up the project locally:
     ```bash
     pip install -r requirements.txt
     ```
-    *Note: The `requirements.txt` file is currently empty as the project dependencies are not yet defined.*
+    *Note: The `requirements.txt` file may currently be empty as the project dependencies are not yet defined.*
 
 ## Usage
 At this stage, the project consists of basic setup files. You can run the main Python script:
